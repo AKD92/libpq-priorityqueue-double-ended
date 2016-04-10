@@ -1,7 +1,8 @@
 
 
 /************************************************************************************
-	Program Interface of Priority Queue ADT (Based on Heap Data Structure)
+	Program Interface of Double Ended Priority Queue ADT
+	Based on Binary Heap Data Structure
 	Author:             Ashis Kumar Das
 	Email:              akd.bracu@gmail.com
 	GitHub:             https://github.com/AKD92
@@ -12,19 +13,27 @@
 
 
 
-#ifndef PRIORITY_QUEUE_H
-#define PRIORITY_QUEUE_H
+#ifndef DOUBLE_ENDED_PQ_BINHEAP_H
+#define DOUBLE_ENDED_PQ_BINHEAP_H
 
 
 
 
 
 
-
-#define PQ_HEAP_MIN			1
-#define PQ_HEAP_MAX			2
+#define PQ_DEFAULT_EXPAND_FACTOR		20
 
 
+
+
+
+enum pq_heaporient_t {
+	
+	PQ_HEAP_MIN = 0,
+	PQ_HEAP_MAX,
+	
+};
+typedef enum pq_heaporient_t HeapOrientation;
 
 
 
@@ -33,7 +42,7 @@ struct PQnode_ {
 	void *key;							/* User supplied pointer to a Key */
 	void *data;							/* User supplied pointer to a Value (Optional, Can be NULL) */
 	
-	int (*compareKey)
+	int (*fpCompareKey)
 			(const void *key1, const void *key2);
 										/* User supplied comparing function to compare Keys */
 };
@@ -47,14 +56,16 @@ struct PQ_ {
 										/* The operations of a PQ like removeMin(), removeMAX(), insert() */
 										/* Will eventually manipulate this array using HEAP algorithms */
 	
-	unsigned int heapState;				/* Current state of Heap Orientation: PQ_HEAP_MIN or PQ_HEAP_MAX */
+	HeapOrientation heapOrint;			/* Current state of Heap Orientation: PQ_HEAP_MIN or PQ_HEAP_MAX */
 	
 	unsigned int nodeCount;				/* Number of objects in the PQnode array (not array length) */
 	unsigned int arraySize;				/* Length of PQnode array */
+	unsigned int expandFactor;			/* Customizable factor integer by which */
+										/* Internal array will be expanded (resized) */
 	
-	int		(*compareKey) 	(const void *key1, const void *key2);
-	void 	(*destroyKey)	(void *keyElement);
-	void 	(*destroyData) 	(void *dataElement);
+	int     (*fpCompareKey)     (const void *key1, const void *key2);
+	void    (*fpDestroyKey)     (void *keyElement);
+	void    (*fpDestroyData)    (void *dataElement);
 	
 };
 typedef struct PQ_ PriorityQueue;
@@ -65,17 +76,22 @@ typedef struct PQ_ PriorityQueue;
 
 #define pq_size(pq) ((pq)->nodeCount)
 
+#define pq_heapOrientation(pq) ((pq)->heapOrint)
+
+#define pq_expandFactor(pq) ((pq)->expandFactor)
 
 
-int pq_init(PriorityQueue *queue,
-				int (*compareKey) (const void *key1, const void *key2),
-				void (*destroyKey) (void *key), void (*destroyData) (void *data));
+int pq_init(PriorityQueue *queue, HeapOrientation hOrientation,
+				int (*fpCompareKey) (const void *key1, const void *key2),
+				void (*fpDestroyKey) (void *key), void (*fpDestroyData) (void *data));
 
 void pq_destroy(PriorityQueue *queue);
 
 
 
-int pq_peek(PriorityQueue *queue, void **key, void **data);
+int pq_peekMin(PriorityQueue *queue, void **key, void **data);
+
+int pq_peekMax(PriorityQueue *queue, void **key, void **data);
 
 int pq_insert(PriorityQueue* pq, const void *key, const void *data);
 

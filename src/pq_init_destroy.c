@@ -1,7 +1,8 @@
 
 
 /************************************************************************************
-	Implementation of Priority Queue ADT Initialization & Destruction functions
+	Implementation of Double Ended Priority Queue ADT
+	Initialization & Destruction functions
 	Author:             Ashis Kumar Das
 	Email:              akd.bracu@gmail.com
 	GitHub:             https://github.com/AKD92
@@ -18,16 +19,16 @@
 
 
 
-#define PQ_INIT_SIZE					20
+#define PQ_INIT_SIZE		10
 
 
 
 
 
 
-int pq_init(PriorityQueue *pq,
-				int (*compareKey) (const void *key1, const void *key2),
-				void (*destroyKey) (void *key), void (*destroyData) (void *data))
+int pq_init(PriorityQueue *pq, HeapOrientation hOrientation,
+				int (*fpCompareKey) (const void *key1, const void *key2),
+				void (*fpDestroyKey) (void *key), void (*fpDestroyData) (void *data))
 {
 	
 	PQnode *array;
@@ -39,11 +40,12 @@ int pq_init(PriorityQueue *pq,
 	
 	pq->pNodeArray = array;
 	pq->nodeCount = 0;
-	pq->heapState = PQ_HEAP_MIN;
+	pq->heapOrint = hOrientation;
 	pq->arraySize = PQ_INIT_SIZE;
-	pq->compareKey = compareKey;
-	pq->destroyKey = destroyKey;
-	pq->destroyData = destroyData;
+	pq->expandFactor = PQ_DEFAULT_EXPAND_FACTOR;
+	pq->fpCompareKey = fpCompareKey;
+	pq->fpDestroyKey = fpDestroyKey;
+	pq->fpDestroyData = fpDestroyData;
 	
 	return 0;
 }
@@ -53,21 +55,29 @@ int pq_init(PriorityQueue *pq,
 void pq_destroy(PriorityQueue *pq) {
 	
 	register PQnode *pNode;
-	register unsigned int iIndex;
+	register unsigned int iNodeIndex;
+	void *vfpDesKey, *vfpDesData;
 	
-	iIndex = 0;
-	while (iIndex < pq->nodeCount) {
+	vfpDesKey = (void *) pq->fpDestroyKey;
+	vfpDesData = (void *) pq->fpDestroyData;
+	
+	if (vfpDesKey == 0 && vfpDesData == 0)
+		goto CLEAN_UP;
+	
+	iNodeIndex = 0;
+	while (iNodeIndex < pq_size(pq)) {
 		
-		pNode = pq->pNodeArray + iIndex;
-		if (pq->destroyKey != 0) {
-			pq->destroyKey(pNode->key);
+		pNode = pq->pNodeArray + iNodeIndex;
+		if (pq->fpDestroyKey != 0) {
+			pq->fpDestroyKey(pNode->key);
 		}
-		if (pq->destroyData != 0) {
-			pq->destroyData(pNode->data);
+		if (pq->fpDestroyData != 0) {
+			pq->fpDestroyData(pNode->data);
 		}
-		iIndex = iIndex + 1;
+		iNodeIndex = iNodeIndex + 1;
 	}
 	
+	CLEAN_UP:
 	free((void *) pq->pNodeArray);
 	memset((void *) pq, 0, sizeof(PriorityQueue));
 	return;

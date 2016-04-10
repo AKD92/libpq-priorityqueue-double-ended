@@ -1,7 +1,8 @@
 
 
 /************************************************************************************
-	Implementation of Priority Queue ADT Utility functions
+	Implementation of Double Ended Priority Queue ADT
+	Utility functions
 	Author:             Ashis Kumar Das
 	Email:              akd.bracu@gmail.com
 	GitHub:             https://github.com/AKD92
@@ -15,9 +16,6 @@
 #include "pq.h"
 #include <string.h>
 #include <stdlib.h>
-
-
-#define PQ_RESIZE_FACTOR				2
 
 
 
@@ -42,8 +40,11 @@ int pq_expandSize(PriorityQueue *pq) {
 	unsigned int newSize, oldSize;
 	void *newNodeArray, *oldNodeArray;
 	
+	if (pq->expandFactor < 2)
+		return -1;
+	
 	oldSize = pq->arraySize;
-	newSize = oldSize * PQ_RESIZE_FACTOR;
+	newSize = oldSize * pq->expandFactor;
 	
 	oldNodeArray = (void *) pq->pNodeArray;
 	newNodeArray = malloc(newSize * sizeof(PQnode));
@@ -69,7 +70,7 @@ int pq_nodeCompare(const void *arg1, const void *arg2) {
 	node1 = (const PQnode *) arg1;
 	node2 = (const PQnode *) arg2;
 	
-	cmpresult = node1->compareKey((const void *) node1->key, (const void *) node2->key);
+	cmpresult = node1->fpCompareKey((const void *) node1->key, (const void *) node2->key);
 	return cmpresult;
 }
 
