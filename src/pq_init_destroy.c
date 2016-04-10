@@ -33,10 +33,13 @@ int pq_init(PriorityQueue *pq, HeapOrientation hOrientation,
 	
 	PQnode *array;
 	
+	if (pq == 0 || fpCompareKey == 0)
+		return -1;
+	
 	array = 0;
 	array = (PQnode *) malloc(sizeof(PQnode) * PQ_INIT_SIZE);
 	if (array == 0)
-		return -1;
+		return -2;
 	
 	pq->pNodeArray = array;
 	pq->nodeCount = 0;
