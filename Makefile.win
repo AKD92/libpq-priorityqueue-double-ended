@@ -6,9 +6,9 @@ CC       = gcc.exe
 WINDRES  = windres.exe
 OBJ      = obj/pq_utils.o obj/pq_init_destroy.o obj/pq_mutation.o
 LINKOBJ  = obj/pq_utils.o obj/pq_init_destroy.o obj/pq_mutation.o
-LIBS     = -L"C:/Dev-Cpp/MinGW32/lib" -L"C:/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -L"G:/Ashish Files/documents/Dev C++ Project Files/Heap Algorithms Library/lib" -lheap -s
-INCS     = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"G:/Ashish Files/documents/Dev C++ Project Files/Heap Algorithms Library/src"
-CXXINCS  = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"G:/Ashish Files/documents/Dev C++ Project Files/Heap Algorithms Library/src"
+LIBS     = -L"C:/Dev-Cpp/MinGW32/lib" -L"C:/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -L"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/lib" -lbinheap -s
+INCS     = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/src"
+CXXINCS  = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/src"
 BIN      = lib/libpq.a
 CXXFLAGS = $(CXXINCS) -ansi -std=c99 -Wall
 CFLAGS   = $(INCS) -ansi -std=c99 -Wall
