@@ -19,11 +19,16 @@
 
 
 
+
 #define PQ_INIT_SIZE		10
 
 
 
 
+
+
+/************************************************************************************/
+/************************************************************************************/
 
 
 int pq_init(PriorityQueue *pq, HeapOrientation hOrientation,
@@ -58,7 +63,7 @@ int pq_init(PriorityQueue *pq, HeapOrientation hOrientation,
 void pq_destroy(PriorityQueue *pq) {
 	
 	register PQnode *pNode;
-	register unsigned int iNodeIndex;
+	register unsigned int iNode;
 	void *vfpDesKey, *vfpDesData;
 	
 	vfpDesKey = (void *) pq->fpDestroyKey;
@@ -67,17 +72,17 @@ void pq_destroy(PriorityQueue *pq) {
 	if (vfpDesKey == 0 && vfpDesData == 0)
 		goto CLEAN_UP;
 	
-	iNodeIndex = 0;
-	while (iNodeIndex < pq_size(pq)) {
+	iNode = 0;
+	while (iNode < pq_size(pq)) {
 		
-		pNode = pq->pNodeArray + iNodeIndex;
+		pNode = pq->pNodeArray + iNode;
 		if (pq->fpDestroyKey != 0) {
 			pq->fpDestroyKey(pNode->key);
 		}
 		if (pq->fpDestroyData != 0) {
 			pq->fpDestroyData(pNode->data);
 		}
-		iNodeIndex = iNodeIndex + 1;
+		iNode = iNode + 1;
 	}
 	
 	CLEAN_UP:
@@ -85,4 +90,5 @@ void pq_destroy(PriorityQueue *pq) {
 	memset((void *) pq, 0, sizeof(PriorityQueue));
 	return;
 }
+
 

@@ -24,6 +24,9 @@
 
 
 
+/************************************************************************************/
+/************************************************************************************/
+
 
 int pq_expandSize(PriorityQueue *pq);
 
@@ -32,30 +35,32 @@ int pq_nodeCompare(const void *arg1, const void *arg2);
 
 
 
-
+/************************************************************************************/
+/************************************************************************************/
 
 
 int pq_expandSize(PriorityQueue *pq) {
 	
+	void *pNewArray, *pOldArray;
 	unsigned int newSize, oldSize;
-	void *newNodeArray, *oldNodeArray;
 	
 	if (pq->expandFactor < 2)
 		return -1;
 	
+	pNewArray = 0;
 	oldSize = pq->arraySize;
 	newSize = oldSize * pq->expandFactor;
 	
-	oldNodeArray = (void *) pq->pNodeArray;
-	newNodeArray = malloc(newSize * sizeof(PQnode));
-	if (newNodeArray == 0)
+	pOldArray = (void *) pq->pNodeArray;
+	pNewArray = malloc(newSize * sizeof(PQnode));
+	if (pNewArray == 0)
 		return -1;
 	
-	memcpy(newNodeArray, (const void *) oldNodeArray, sizeof(PQnode) * oldSize);
+	memcpy(pNewArray, (const void *) pOldArray, sizeof(PQnode) * oldSize);
 	
-	pq->pNodeArray = (PQnode *) newNodeArray;
+	pq->pNodeArray = (PQnode *) pNewArray;
 	pq->arraySize = newSize;
-	free((void*) oldNodeArray);
+	free((void*) pOldArray);
 	
 	return 0;
 }
@@ -64,13 +69,14 @@ int pq_expandSize(PriorityQueue *pq) {
 
 int pq_nodeCompare(const void *arg1, const void *arg2) {
 	
-	int cmpresult;
-	const PQnode *node1, *node2;
+	int iCompareVal;
+	const PQnode *pNode1, *pNode2;
 	
-	node1 = (const PQnode *) arg1;
-	node2 = (const PQnode *) arg2;
+	pNode1 = (const PQnode *) arg1;
+	pNode2 = (const PQnode *) arg2;
 	
-	cmpresult = node1->fpCompareKey((const void *) node1->key, (const void *) node2->key);
-	return cmpresult;
+	iCompareVal = pNode1->fpCompareKey((const void *) pNode1->key, (const void *) pNode2->key);
+	return iCompareVal;
 }
+
 

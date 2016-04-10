@@ -26,6 +26,9 @@
 
 
 
+/************************************************************************************/
+/************************************************************************************/
+
 
 enum pq_heaporient_t {
 	
@@ -50,7 +53,7 @@ typedef struct PQnode_ PQnode;
 
 
 
-struct PQ_ {
+struct PQ_DE_ {
 	
 	PQnode *pNodeArray;					/* Array of PQnode objects, which will carry user keys & data */
 										/* The operations of a PQ like removeMin(), removeMAX(), insert() */
@@ -68,17 +71,24 @@ struct PQ_ {
 	void    (*fpDestroyData)    (void *dataElement);
 	
 };
-typedef struct PQ_ PriorityQueue;
+typedef struct PQ_DE_ PriorityQueue;
 
 
 
 
+/************************************************************************************/
+/************************************************************************************/
+
+
+
+#define pq_array(pq) ((pq)->pNodeArray)
 
 #define pq_size(pq) ((pq)->nodeCount)
 
 #define pq_heapOrientation(pq) ((pq)->heapOrint)
 
 #define pq_expandFactor(pq) ((pq)->expandFactor)
+
 
 
 int pq_init(PriorityQueue *queue, HeapOrientation hOrientation,
@@ -93,7 +103,11 @@ int pq_peekMin(PriorityQueue *queue, void **key, void **data);
 
 int pq_peekMax(PriorityQueue *queue, void **key, void **data);
 
+
+
 int pq_insert(PriorityQueue* pq, const void *key, const void *data);
+
+
 
 int pq_removeMin(PriorityQueue *pq, void **key, void **data);
 
@@ -105,3 +119,5 @@ int pq_removeMax(PriorityQueue *pq, void **key, void **data);
 
 
 #endif
+
+
