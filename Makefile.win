@@ -1,4 +1,4 @@
-# Project: Priority Queue ADT
+# Project: Priority Queue ADT (Double Ended)
 # Makefile created by Dev-C++ 5.11
 
 CPP      = g++.exe
