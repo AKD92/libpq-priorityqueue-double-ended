@@ -45,7 +45,7 @@ int pq_insert(PriorityQueue* pq, const void *key, const void *data) {
 	BinHeap heap;
 	PQnode *pNode;
 	int opExpand;
-	int (*fBinHeapSwimAlgorithm) (BinHeap *heap, unsigned int index);
+	int (*fpHeapSwimAlgorithm) (BinHeap *heap, unsigned int index);
 	
 	
 	/* Expand internal array if the array is full */
@@ -62,13 +62,13 @@ int pq_insert(PriorityQueue* pq, const void *key, const void *data) {
 	/* We insert into this PQ according to the Rules of current BinHeap Orientation */
 	switch (pq->heapOrint) {
 		case PQ_HEAP_MAX:
-			fBinHeapSwimAlgorithm = binheap_swimHeavyElement;
+			fpHeapSwimAlgorithm = binheap_swimHeavyElement;
 			break;
 		case PQ_HEAP_MIN:
-			fBinHeapSwimAlgorithm = binheap_swimLightElement;
+			fpHeapSwimAlgorithm = binheap_swimLightElement;
 			break;
 		default:
-			fBinHeapSwimAlgorithm = 0;
+			fpHeapSwimAlgorithm = 0;
 			return -1;
 	}
 	
@@ -80,13 +80,13 @@ int pq_insert(PriorityQueue* pq, const void *key, const void *data) {
 	pNode->fpCompareKey = pq->fpCompareKey;
 	pq_size(pq) = pq_size(pq) + 1;
 	
-	if (pq->nodeCount == 1)
+	if (pq_size(pq) == 1)
 		return 0;
 	
 	/* Maintain BinHeap Property */
 	/* Apply BinHeap Algorthms */
 	binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
-	fBinHeapSwimAlgorithm(&heap, pq_size(pq) - 1);
+	fpHeapSwimAlgorithm(&heap, pq_size(pq) - 1);
 	binheap_destroy(&heap);
 	
 	return 0;
