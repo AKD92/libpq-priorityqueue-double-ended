@@ -1,8 +1,7 @@
 
 
 /************************************************************************************
-	Implementation of Double Ended Priority Queue ADT
-	Mutation Algorithms
+	Implementation of Double Ended Priority Queue ADT Mutation Algorithms
 	Author:             Ashis Kumar Das
 	Email:              akd.bracu@gmail.com
 	GitHub:             https://github.com/AKD92
@@ -14,9 +13,9 @@
 
 
 #include "pq.h"
-#include <binheap.h>
 #include <stdlib.h>
 #include <string.h>
+#include <binheap.h>
 
 
 
@@ -29,7 +28,7 @@
 /************************************************************************************/
 
 
-int pq_expandSize(PriorityQueue *pq);
+int pq_expandCapacity(PriorityQueue *pq);
 
 int pq_nodeCompare(const void *arg1, const void *arg2);
 
@@ -48,19 +47,24 @@ int pq_insert(PriorityQueue* pq, const void *key, const void *data) {
 	int (*fpHeapSwimAlgorithm) (BinHeap *heap, unsigned int index);
 	
 	
+	/* Check for invalid function arguments */
+	if (pq == 0 || key == 0)
+		return -1;
+	
+	
 	/* Expand internal array if the array is full */
 	/* Expand operation can fail due to unavailability of additional memory */
 	/* It can also fail if ExpandFactor if this PQ is less than 2 */
-	if (pq_size(pq) == pq->arraySize) {
-		opExpand = pq_expandSize(pq);
+	if (pq_size(pq) == pq_capacity(pq)) {
+		opExpand = pq_expandCapacity(pq);
 		if (opExpand != 0)
 			return -1;
 	}
 	
 	
-	/* Detech which BinHeap Orientation this PQ is currently using */
-	/* We insert into this PQ according to the Rules of current BinHeap Orientation */
-	switch (pq->heapOrint) {
+	/* Select which Heap Orientation this PQ is currently configured to */
+	/* We insert into this PQ according to the Rules of current Heap Orientation */
+	switch (pq_heapOrientation(pq)) {
 		case PQ_HEAP_MAX:
 			fpHeapSwimAlgorithm = binheap_swimHeavyElement;
 			break;
@@ -103,17 +107,21 @@ int pq_removeMax(PriorityQueue *pq, void **key, void **data) {
 	BinHeap heap;
 	PQnode *pNodeMax;
 	
+	
+	/* Check for invalid function arguments */
+	if (pq == 0)
+		return -1;
 	if (pq_size(pq) == 0)
 		return -1;
 	
 	
-	/* Detect current BinHeap Orientation this PQ is using */
-	/* If current BinHeap Orientation is MIN HEAP, transform it to MAX HEAP */
-	if (pq->heapOrint == PQ_HEAP_MIN) {
+	/* Detect which Heap Orientation this PQ is currently configured to */
+	/* If current Heap Orientation is a MIN HEAP, transform it to a MAX HEAP */
+	if (pq_heapOrientation(pq) == PQ_HEAP_MIN) {
 		binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
-		binheap_buildMaxBinHeap(&heap);
+		binheap_buildMaxBinaryHeap(&heap);
 		binheap_destroy(&heap);
-		pq->heapOrint = PQ_HEAP_MAX;
+		pq_heapOrientation(pq) = PQ_HEAP_MAX;
 	}
 	
 	
@@ -126,11 +134,11 @@ int pq_removeMax(PriorityQueue *pq, void **key, void **data) {
 	if (pq_size(pq) == 0)
 		return 0;
 	
-	/* We need to maintain the HEAP Property */
+	/* Restore the HEAP Property */
 	/* Apply HEAP algorithm, by creating a heap, call function and destroy heap */
 	binheap_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_nodeCompare);
-	binheap_exchangeElement(0, heap.elemCount - 1, &heap);
-	heap.elemCount = heap.elemCount - 1;
+	binheap_swapElements(0, binheap_size(&heap) - 1, &heap);
+	binheap_size(&heap) = binheap_size(&heap) - 1;
 	binheap_sinkLightElement(&heap, 0);
 	binheap_destroy(&heap);
 	
@@ -144,17 +152,21 @@ int pq_peekMax(PriorityQueue *pq, void **key, void **data) {
 	BinHeap heap;
 	PQnode *pNodeMax;
 	
+	
+	/* Check for invalid function arguments */
+	if (pq == 0)
+		return -1;
 	if (pq_size(pq) == 0)
 		return -1;
 	
 	
-	/* Detect current BinHeap Orientation this PQ is using */
-	/* If current BinHeap Orientation is MIN HEAP, transform it to MAX HEAP */
-	if (pq->heapOrint == PQ_HEAP_MIN) {
+	/* Detect which Heap Orientation this PQ is currently configured to */
+	/* If current Heap Orientation is a MIN HEAP, transform it to a MAX HEAP */
+	if (pq_heapOrientation(pq) == PQ_HEAP_MIN) {
 		binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
-		binheap_buildMaxBinHeap(&heap);
+		binheap_buildMaxBinaryHeap(&heap);
 		binheap_destroy(&heap);
-		pq->heapOrint = PQ_HEAP_MAX;
+		pq_heapOrientation(pq) = PQ_HEAP_MAX;
 	}
 	
 	
@@ -162,7 +174,6 @@ int pq_peekMax(PriorityQueue *pq, void **key, void **data) {
 	pNodeMax = pq_array(pq) + 0;
 	if (key != 0) *key = pNodeMax->key;
 	if (data != 0) *data = pNodeMax->data;
-	
 	return 0;
 }
 
@@ -177,17 +188,21 @@ int pq_removeMin(PriorityQueue *pq, void **key, void **data) {
 	BinHeap heap;
 	PQnode *pNodeMin;
 	
+	
+	/* Check for invalid function arguments */
+	if (pq == 0)
+		return -1;
 	if (pq_size(pq) == 0)
 		return -1;
 	
 	
-	/* Detect current BinHeap Orientation this PQ is using */
-	/* If current BinHeap Orientation is MAX HEAP, transform it to MIN HEAP */
-	if (pq->heapOrint == PQ_HEAP_MAX) {
+	/* Detect which Heap Orientation this PQ is currently configured to */
+	/* If current Heap Orientation is a MAX HEAP, transform it to a MIN HEAP */
+	if (pq_heapOrientation(pq) == PQ_HEAP_MAX) {
 		binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
-		binheap_buildMinBinHeap(&heap);
+		binheap_buildMinBinaryHeap(&heap);
 		binheap_destroy(&heap);
-		pq->heapOrint = PQ_HEAP_MIN;
+		pq_heapOrientation(pq) = PQ_HEAP_MIN;
 	}
 	
 	
@@ -200,11 +215,11 @@ int pq_removeMin(PriorityQueue *pq, void **key, void **data) {
 	if (pq_size(pq) == 0)
 	return 0;
 	
-	/* We need to maintain the HEAP Property */
+	/* Restore the HEAP Property */
 	/* Apply HEAP algorithm, by creating a heap, call function and destroy heap */
 	binheap_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_nodeCompare);
-	binheap_exchangeElement(0, heap.elemCount - 1, &heap);
-	heap.elemCount = heap.elemCount - 1;
+	binheap_swapElements(0, binheap_size(&heap) - 1, &heap);
+	binheap_size(&heap) = binheap_size(&heap) - 1;
 	binheap_sinkHeavyElement(&heap, 0);
 	binheap_destroy(&heap);
 	
@@ -217,17 +232,21 @@ int pq_peekMin(PriorityQueue *pq, void **key, void **data) {
 	BinHeap heap;
 	PQnode *pNodeMin;
 	
+	
+	/* Check for invalid function arguments */
+	if (pq == 0)
+		return -1;
 	if (pq_size(pq) == 0)
 		return -1;
 	
 	
-	/* Detect current BinHeap Orientation this PQ is using */
-	/* If current BinHeap Orientation is MAX HEAP, transform it to MIN HEAP */
-	if (pq->heapOrint == PQ_HEAP_MAX) {
+	/* Detect which Heap Orientation this PQ is currently configured to */
+	/* If current Heap Orientation is a MAX HEAP, transform it to a MIN HEAP */
+	if (pq_heapOrientation(pq) == PQ_HEAP_MAX) {
 		binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
-		binheap_buildMinBinHeap(&heap);
+		binheap_buildMinBinaryHeap(&heap);
 		binheap_destroy(&heap);
-		pq->heapOrint = PQ_HEAP_MIN;
+		pq_heapOrientation(pq) = PQ_HEAP_MIN;
 	}
 	
 	
@@ -235,7 +254,6 @@ int pq_peekMin(PriorityQueue *pq, void **key, void **data) {
 	pNodeMin = pq_array(pq) + 0;
 	if (key != 0) *key = pNodeMin->key;
 	if (data != 0) *data = pNodeMin->data;
-	
 	return 0;
 }
 
