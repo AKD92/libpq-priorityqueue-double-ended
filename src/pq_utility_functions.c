@@ -55,7 +55,7 @@ int pq_expandCapacity(PriorityQueue *pq) {
     iCapacityNew = iCapacityOld * pq_expandFactor(pq);
     
     
-    /* Request for expanded memory region using malloc() */
+    /* Request for an expanded memory region using malloc() */
     pArrayNew = 0;
     pArrayOld = (void *) pq_array(pq);
     pArrayNew = (void *) malloc(iCapacityNew * sizeof(PQnode));

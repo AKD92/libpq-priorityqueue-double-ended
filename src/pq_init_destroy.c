@@ -20,7 +20,7 @@
 
 
 
-#define PQ_INITIAL_CAPACITY     10
+#define PQ_INITIAL_CAPACITY         10
 
 
 

@@ -87,8 +87,8 @@ int pq_insert(PriorityQueue *pq, const void *key, const void *data) {
     if (pq_size(pq) == 1)
         return 0;
     
-    /* Maintain BinHeap Property */
-    /* Apply BinHeap Algorthms */
+    /* Restore Binary Heap Property */
+    /* Apply Binary Heap Algorthms */
     binheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
     fpHeapSwimAlgorithm(&heap, pq_size(pq) - 1);
     binheap_destroy(&heap);
@@ -127,15 +127,17 @@ int pq_removeMax(PriorityQueue *pq, void **key, void **data) {
     
     /* Access data for transfering to the caller */
     pNodeMax = pq_array(pq) + 0;
-    if (key != 0) *key = pNodeMax->key;
-    if (data != 0) *data = pNodeMax->data;
+    if (key != 0)
+        *key = pNodeMax->key;
+    if (data != 0)
+        *data = pNodeMax->data;
     pq_size(pq) = pq_size(pq) - 1;
     
     if (pq_size(pq) == 0)
         return 0;
     
-    /* Restore the HEAP Property */
-    /* Apply HEAP algorithm, by creating a heap, call function and destroy heap */
+    /* Restore Binary Heap Property */
+    /* Apply Binary Heap algorithm, by creating a heap, call function and destroy heap */
     binheap_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_nodeCompare);
     binheap_swapElements(0, binheap_size(&heap) - 1, &heap);
     binheap_size(&heap) = binheap_size(&heap) - 1;
@@ -172,8 +174,11 @@ int pq_peekMax(PriorityQueue *pq, void **key, void **data) {
     
     /* Access data for transfering to the caller */
     pNodeMax = pq_array(pq) + 0;
-    if (key != 0) *key = pNodeMax->key;
-    if (data != 0) *data = pNodeMax->data;
+    if (key != 0)
+        *key = pNodeMax->key;
+    if (data != 0)
+        *data = pNodeMax->data;
+    
     return 0;
 }
 
@@ -208,15 +213,17 @@ int pq_removeMin(PriorityQueue *pq, void **key, void **data) {
     
     /* Access data for transfering to the caller */
     pNodeMin = pq_array(pq) + 0;
-    if (key != 0) *key = pNodeMin->key;
-    if (data != 0) *data = pNodeMin->data;
+    if (key != 0)
+        *key = pNodeMin->key;
+    if (data != 0)
+        *data = pNodeMin->data;
     pq_size(pq) = pq_size(pq) - 1;
     
     if (pq_size(pq) == 0)
-    return 0;
+        return 0;
     
-    /* Restore the HEAP Property */
-    /* Apply HEAP algorithm, by creating a heap, call function and destroy heap */
+    /* Restore Binary Heap Property */
+    /* Apply Binary Heap algorithm, by creating a heap, call function and destroy heap */
     binheap_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_nodeCompare);
     binheap_swapElements(0, binheap_size(&heap) - 1, &heap);
     binheap_size(&heap) = binheap_size(&heap) - 1;
@@ -252,8 +259,11 @@ int pq_peekMin(PriorityQueue *pq, void **key, void **data) {
     
     /* Access data for transfering to the caller */
     pNodeMin = pq_array(pq) + 0;
-    if (key != 0) *key = pNodeMin->key;
-    if (data != 0) *data = pNodeMin->data;
+    if (key != 0)
+        *key = pNodeMin->key;
+    if (data != 0)
+        *data = pNodeMin->data;
+    
     return 0;
 }
 
