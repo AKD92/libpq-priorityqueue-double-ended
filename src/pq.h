@@ -81,15 +81,16 @@ typedef struct PQ_DE_ PriorityQueue;
 
 
 
-#define pq_array(pq)             ((pq)->pArrayNode)
 
-#define pq_size(pq)              ((pq)->nodeCount)
+#define pq_array(pq)                         ((pq)->pArrayNode)
 
-#define pq_capacity(pq)          ((pq)->arrCapacity)
+#define pq_size(pq)                          ((pq)->nodeCount)
 
-#define pq_heapOrientation(pq)   ((pq)->heapOrint)
+#define pq_capacity(pq)                      ((pq)->arrCapacity)
 
-#define pq_expandFactor(pq)      ((pq)->expandFactor)
+#define pq_heapOrientation(pq)               ((pq)->heapOrint)
+
+#define pq_expandFactor(pq)                  ((pq)->expandFactor)
 
 
 
@@ -107,7 +108,7 @@ int pq_peekMax(PriorityQueue *pq, void **key, void **data);
 
 
 
-int pq_insert(PriorityQueue* pq, const void *key, const void *data);
+int pq_insert(PriorityQueue *pq, const void *key, const void *data);
 
 
 
