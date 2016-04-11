@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = obj/pq_utils.o obj/pq_init_destroy.o obj/pq_mutation.o
-LINKOBJ  = obj/pq_utils.o obj/pq_init_destroy.o obj/pq_mutation.o
+OBJ      = obj/pq_utility_functions.o obj/pq_init_destroy.o obj/pq_mutation_algorithms.o
+LINKOBJ  = obj/pq_utility_functions.o obj/pq_init_destroy.o obj/pq_mutation_algorithms.o
 LIBS     = -L"C:/Dev-Cpp/MinGW32/lib" -L"C:/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -L"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/lib" -lbinheap -s
 INCS     = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/src"
 CXXINCS  = -I"C:/Dev-Cpp/MinGW32/include" -I"C:/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"G:/Ashish Files/documents/Dev C++ Project Files/Binary Heap Algorithms Library/src"
@@ -25,11 +25,11 @@ $(BIN): $(LINKOBJ)
 	ar r $(BIN) $(LINKOBJ)
 	ranlib $(BIN)
 
-obj/pq_utils.o: src/pq_utils.c
-	$(CC) -c src/pq_utils.c -o obj/pq_utils.o $(CFLAGS)
+obj/pq_utility_functions.o: src/pq_utility_functions.c
+	$(CC) -c src/pq_utility_functions.c -o obj/pq_utility_functions.o $(CFLAGS)
 
 obj/pq_init_destroy.o: src/pq_init_destroy.c
 	$(CC) -c src/pq_init_destroy.c -o obj/pq_init_destroy.o $(CFLAGS)
 
-obj/pq_mutation.o: src/pq_mutation.c
-	$(CC) -c src/pq_mutation.c -o obj/pq_mutation.o $(CFLAGS)
+obj/pq_mutation_algorithms.o: src/pq_mutation_algorithms.c
+	$(CC) -c src/pq_mutation_algorithms.c -o obj/pq_mutation_algorithms.o $(CFLAGS)
