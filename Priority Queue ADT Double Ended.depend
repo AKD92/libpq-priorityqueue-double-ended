@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1460335102 source:e:\code\priority queue adt double ended\src\pq_init_destroy.c
+	"pq.h"
+	<stdlib.h>
+	<string.h>
+
+1460335102 e:\code\priority queue adt double ended\src\pq.h
+
