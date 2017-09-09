@@ -13,8 +13,8 @@
 
 
 
-#ifndef DOUBLE_ENDED_PQ_BINHEAP_H
-#define DOUBLE_ENDED_PQ_BINHEAP_H
+#ifndef DOUBLE_ENDED_PQ_BIHEAP_H
+#define DOUBLE_ENDED_PQ_BIHEAP_H
 
 
 
@@ -120,6 +120,8 @@ int pq_peekMax(PriorityQueue *pq, void **key, void **data);
 
 
 int pq_insert(PriorityQueue *pq, const void *key, const void *data);
+
+int pq_updateKey(PriorityQueue *pq, const void *pOldKey, const void *pNewKey, void **pRealOldKey);
 
 
 

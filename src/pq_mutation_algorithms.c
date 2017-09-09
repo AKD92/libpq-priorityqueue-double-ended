@@ -98,6 +98,75 @@ int pq_insert(PriorityQueue *pq, const void *key, const void *data) {
 
 
 
+int pq_updateKey(PriorityQueue *pq, const void *pOldKey, const void *pNewKey, void **pRealOldKey) {
+    
+    BiHeap heap;
+    PQnode *pNode;
+    int (*fpHeapAlgorithm) (BiHeap *heap, unsigned int index);
+    unsigned int index;
+    int isRoot;
+    int hasLeftChild, hasRightChild;
+    int cmpWithParent;
+    int cmpWithLeftChild, cmpWithRightChild;
+    PQnode *pParent;
+    PQnode *pLeftChild, *pRightChild;
+    
+    if (pq == 0 || pOldKey == 0 || pNewKey == 0)
+        return -1;
+    if (pq_size(pq) == 0)
+        return -1;
+    
+    for (index = 0; index < pq_size(pq); index += 1) {
+        pNode = pq_array(pq) + index;
+        if (pq->fpCompareKey(pNode->key, pOldKey) == 0) {
+            break;
+        }
+    }
+    
+    if (index == pq_size(pq))
+        return -1;
+    if (pRealOldKey != 0)
+        *pRealOldKey = pNode->key;
+    
+    pNode->key = (void *) pNewKey;
+    isRoot = index == 0 ? 1 : 0;
+    hasLeftChild = biheap_leftChildIndex(index) < pq_size(pq) ? 1 : 0;
+    hasRightChild = biheap_rightChildIndex(index) < pq_size(pq) ? 1 : 0;
+    pParent = isRoot == 0 ? pq_array(pq) + biheap_parentIndex(index) : 0;
+    pLeftChild = hasLeftChild == 1 ? pq_array(pq) + biheap_leftChildIndex(index) : 0;
+    pRightChild = hasRightChild == 1 ? pq_array(pq) + biheap_rightChildIndex(index) : 0;
+    cmpWithParent = pParent == 0 ? 0 : pq->fpCompareKey(pNode->key, pParent->key);
+    cmpWithLeftChild = hasLeftChild == 1 ? pq->fpCompareKey(pNode->key, pLeftChild->key) : 0;
+    cmpWithRightChild = hasRightChild == 1 ? pq->fpCompareKey(pNode->key, pRightChild->key) : 0;
+    
+    if (pq_heapOrientation(pq) == PQ_HEAP_MIN) {
+        if (isRoot == 0 && cmpWithParent < 0)
+            fpHeapAlgorithm = biheap_swimLightElement;
+        else if (cmpWithLeftChild > 0 || cmpWithRightChild > 0)
+            fpHeapAlgorithm = biheap_sinkHeavyElement;
+        else
+            fpHeapAlgorithm = 0;
+    }
+    else if (pq_heapOrientation(pq) == PQ_HEAP_MAX) {
+        if (isRoot == 0 && cmpWithParent > 0)
+            fpHeapAlgorithm = biheap_swimHeavyElement;
+        else if (cmpWithLeftChild < 0 || cmpWithRightChild < 0)
+            fpHeapAlgorithm = biheap_sinkLightElement;
+        else
+            fpHeapAlgorithm = 0;
+    }
+    else
+        fpHeapAlgorithm = 0;
+    
+    /* Restore Binary Heap Property */
+    /* Apply Binary Heap Algorthms */
+    biheap_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_nodeCompare);
+    fpHeapAlgorithm(&heap, index);
+    biheap_destroy(&heap);
+    return 0;
+}
+
+
 /************************************************************************************/
 /************************************************************************************/
 

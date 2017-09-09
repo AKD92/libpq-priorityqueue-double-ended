@@ -4,5 +4,18 @@
 	<stdlib.h>
 	<string.h>
 
-1460335102 e:\code\priority queue adt double ended\src\pq.h
+1504769802 e:\code\priority queue adt double ended\src\pq.h
+
+1460335102 source:e:\code\priority queue adt double ended\src\pq_utility_functions.c
+	"pq.h"
+	<string.h>
+	<stdlib.h>
+
+1504769567 source:e:\code\priority queue adt double ended\src\pq_mutation_algorithms.c
+	"pq.h"
+	<stdlib.h>
+	<string.h>
+	<biheap.h>
+
+1464827868 e:\code\generic binary heap data structure and algorithms\src\biheap.h
 
