@@ -12,7 +12,9 @@
 
 
 
+
 #include "pq.h"
+#include "pq_internal.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -23,36 +25,22 @@
 
 
 
-/************************************************************************************/
-/************************************************************************************/
 
-
-int pq_expandCapacity(PriorityQueue *pq);
-
-int pq_nodeCompare(const void *arg1, const void *arg2);
-
-
-
-
-/************************************************************************************/
-/************************************************************************************/
-
-
-int pq_expandCapacity(PriorityQueue *pq) {
+int pq_expand_capacity(PriorityQueue *pq) {
     
     void *pArrayNew, *pArrayOld;
     unsigned int iCapacityNew, iCapacityOld;
     
     
     /* Expand Factor less than 2 does not make sense */
-    if (pq_expandFactor(pq) < 2)
+    if (pq_expand_factor(pq) < 2)
         return -1;
     
     
     /* Calculate the size (not in bytes) of new expanded memory region */
     /* New size is the size of old memory region multiplied by Expand Factor */
     iCapacityOld = pq_capacity(pq);
-    iCapacityNew = iCapacityOld * pq_expandFactor(pq);
+    iCapacityNew = iCapacityOld * pq_expand_factor(pq);
     
     
     /* Request for an expanded memory region using malloc() */
@@ -68,7 +56,7 @@ int pq_expandCapacity(PriorityQueue *pq) {
     
     
     /* Copy data from old memory region to new expanded memory region */
-    memcpy(pArrayNew, (const void *) pArrayOld, iCapacityOld * sizeof(PQnode));
+    memcpy((void *) pArrayNew, (const void *) pArrayOld, iCapacityOld * sizeof(PQnode));
     
     
     /* Adjust this Priority Queue to use new memory region */
@@ -84,7 +72,8 @@ int pq_expandCapacity(PriorityQueue *pq) {
 
 
 
-int pq_nodeCompare(const void *arg1, const void *arg2) {
+
+int pq_compare_node(const void *arg1, const void *arg2) {
     
     int iCompareVal;
     PQnode *pNode1, *pNode2;
@@ -92,7 +81,7 @@ int pq_nodeCompare(const void *arg1, const void *arg2) {
     pNode1 = (PQnode *) arg1;
     pNode2 = (PQnode *) arg2;
     
-    iCompareVal = pNode1->fpCompareKey((const void *) pNode1->key, (const void *) pNode2->key);
+    iCompareVal = pNode1->fpComparePriority((const void *) pNode1->priority, (const void *) pNode2->priority);
     return iCompareVal;
 }
 
