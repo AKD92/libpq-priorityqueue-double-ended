@@ -23,6 +23,10 @@
 
 
 
+#define PQ_DEFAULT_EXPANSION_FACTOR        2
+
+
+
 
 
 /*
@@ -34,11 +38,12 @@
  *  
  *  Parameters:
  *      pq          :   The priority queue which is being expanded
+ *                      (can not be NULL)
  *
  *  Returns:
  *      (int)           0 if the capacity is expanded (increased) succesfully
- *                      -1 if the expansion factor is set less than 2
- *                      -2 if the memory could not be allocated
+ *                      -1 if the memory could not be allocated
+ *                      -2 if the specified priority queue is NULL
 */
 int pq_expand_capacity(PriorityQueue *pq);
 

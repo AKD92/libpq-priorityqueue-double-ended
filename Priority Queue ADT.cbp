@@ -6,53 +6,93 @@
 		<Option pch_mode="2" />
 		<Option compiler="tdm-gcc-32-mingw" />
 		<Build>
-			<Target title="Release">
-				<Option output="lib/x86/pq" prefix_auto="1" extension_auto="1" />
+			<Target title="Debug">
+				<Option output="lib/x86/Debug/pq" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
-				<Option object_output="obj/Release/x86/" />
+				<Option object_output="obj/x86/Debug/" />
+				<Option type="2" />
+				<Option compiler="tdm-gcc-32-mingw" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-std=c99" />
+					<Add option="-m32" />
+				</Compiler>
+				<Linker>
+					<Add option="-m32" />
+					<Add directory="$(#libbh.LIB)/x86/Debug" />
+				</Linker>
+			</Target>
+			<Target title="Debug64">
+				<Option output="lib/x64/Debug/pq" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/x64/Debug/" />
+				<Option type="2" />
+				<Option compiler="tdm-gcc-64-mingw-w64" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-std=c99" />
+					<Add option="-m64" />
+				</Compiler>
+				<Linker>
+					<Add option="-m64" />
+					<Add directory="$(#libbh.LIB)/x64/Debug" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="lib/x86/Release/pq" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/x86/Release/" />
 				<Option type="2" />
 				<Option compiler="tdm-gcc-32-mingw" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c99" />
-					<Add option="-ansi" />
+					<Add option="-m32" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="$(#libbiheap.LIB)/x86" />
+					<Add option="-m32" />
+					<Add directory="$(#libbh.LIB)/x86/Release" />
 				</Linker>
 			</Target>
 			<Target title="Release64">
-				<Option output="lib/x64/pq" prefix_auto="1" extension_auto="1" />
+				<Option output="lib/x64/Release/pq" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
-				<Option object_output="obj/Release/x64/" />
+				<Option object_output="obj/x64/Release/" />
 				<Option type="2" />
 				<Option compiler="tdm-gcc-64-mingw-w64" />
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c99" />
-					<Add option="-ansi" />
 					<Add option="-m64" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-m64" />
-					<Add directory="$(#libbiheap.LIB)/x64" />
+					<Add directory="$(#libbh.LIB)/x64/Release" />
 				</Linker>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Debug;Debug64;Release;Release64;" />
+		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="$(#libbiheap.INCLUDE)" />
+			<Add directory="include" />
+			<Add directory="$(#libbh.INCLUDE)" />
 		</Compiler>
 		<Linker>
-			<Add library="biheap" />
+			<Add library="bh" />
 		</Linker>
-		<Unit filename="src/pq.h" />
+		<Unit filename="include/pq.h" />
 		<Unit filename="src/pq_init_destroy.c">
 			<Option compilerVar="CC" />
 		</Unit>

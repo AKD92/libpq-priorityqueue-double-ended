@@ -28,35 +28,7 @@
 int pq_init(
     PriorityQueue *pq,
     enum PQ_HeapOrient_t hOrientation,
-    int (*fpComparePriority) (const void *pr1, const void *pr2),
-    void (*fpDestroyPriority) (void *priority),
-    void (*fpDestroyElement) (void *element)
-)
-{
-    
-    int retval;
-    unsigned int capacity, expandFactor;
-    
-    /*  This initialization function will initialize this queue
-        with the default capacity and default expand factor
-    */
-    capacity = PQ_DEFAULT_CAPACITY;
-    expandFactor = PQ_DEFAULT_EXPAND_FACTOR;
-    
-    /*  Initialize the priority queue */
-    retval = pq_init_ex(pq, hOrientation, capacity, expandFactor, fpComparePriority, fpDestroyPriority, fpDestroyElement);
-    return retval;
-}
-
-
-
-
-
-int pq_init_ex(
-    PriorityQueue *pq,
-    enum PQ_HeapOrient_t hOrientation,
     unsigned int capacity,
-    unsigned int expandFactor,
     int (*fpComparePriority) (const void *pr1, const void *pr2),
     void (*fpDestroyPriority) (void *priority),
     void (*fpDestroyElement) (void *element)
@@ -67,7 +39,7 @@ int pq_init_ex(
     
     
     /* Check for invalid function arguments */
-    if (pq == 0 || fpComparePriority == 0 || capacity == 0 || expandFactor < 2)
+    if (pq == 0 || fpComparePriority == 0 || capacity == 0)
         return -1;
     
     
@@ -86,7 +58,6 @@ int pq_init_ex(
     pq->pArrayNode = pArray;
     pq->heapOrint = hOrientation;
     pq->arrCapacity = capacity;
-    pq->expandFactor = expandFactor;
     pq->fpComparePriority = fpComparePriority;
     pq->fpDestroyPriority = fpDestroyPriority;
     pq->fpDestroyElement = fpDestroyElement;
@@ -100,7 +71,7 @@ int pq_init_ex(
 
 void pq_destroy(PriorityQueue *pq) {
     
-    register PQnode *pNode;
+    PQnode *pNode;
     register unsigned int index;
     
     

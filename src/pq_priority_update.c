@@ -34,7 +34,6 @@ int pq_reassign_priority(
 {
     
     BiHeap heap;
-    PQnode *pNode;
     int (*fpHeapAlgorithm) (BiHeap *heap, unsigned int index);
     unsigned int index;
     
@@ -43,7 +42,7 @@ int pq_reassign_priority(
     int cmpWithParent;
     int cmpWithLeftChild, cmpWithRightChild;
     
-    PQnode *pThis, *pParent;
+    PQnode *pNode, *pThis, *pParent;
     PQnode *pLeftChild, *pRightChild;
     
     
@@ -67,7 +66,7 @@ int pq_reassign_priority(
     
     /*  If the element (elem) does not exist, exit with error code */
     if (pThis == 0)
-        return -1;
+        return -2;
     
     
     /*  The element (elem) has been found.

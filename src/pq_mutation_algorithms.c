@@ -42,7 +42,6 @@ int pq_insert_with_priority(PriorityQueue *pq, const void *elem, const void *pri
     
     /* Expand internal array if the array is full */
     /* Expand operation can fail due to unavailability of additional memory */
-    /* It can also fail if ExpandFactor of this PQ is set less than 2 */
     if (pq_size(pq) == pq_capacity(pq)) {
         opExpand = pq_expand_capacity(pq);
         if (opExpand != 0)
@@ -75,8 +74,9 @@ int pq_insert_with_priority(PriorityQueue *pq, const void *elem, const void *pri
     if (pq_size(pq) == 1)
         return 0;
     
-    /* Restore Binary Heap Property */
-    /* Apply Binary Heap Algorthms */
+    /*  Restore binary heap property.
+        Run the chosen algorithm / operation.
+    */
     bh_init(&heap, (void *) pq_array(pq), pq_size(pq), sizeof(PQnode), pq_compare_node);
     fpHeapSwimAlgorithm(&heap, pq_size(pq) - 1);
     bh_destroy(&heap);
@@ -120,8 +120,9 @@ int pq_pull_minimum(PriorityQueue *pq, void **priority, void **elem) {
     if (pq_size(pq) == 0)
         return 0;
     
-    /* Restore Binary Heap Property */
-    /* Apply Binary Heap algorithm, by initializing a heap, call function and destroy it */
+    /*  Restore binary heap property.
+        Run the chosen algorithm / operation.
+    */
     bh_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_compare_node);
     bh_swap(0, bh_size(&heap) - 1, &heap);
     bh_size(&heap) = bh_size(&heap) - 1;
@@ -202,8 +203,9 @@ int pq_pull_maximum(PriorityQueue *pq, void **priority, void **elem) {
     if (pq_size(pq) == 0)
         return 0;
     
-    /* Restore Binary Heap Property */
-    /* Apply Binary Heap algorithm, by initializing a heap, call function and destroy it */
+    /*  Restore binary heap property.
+        Run the chosen algorithm / operation.
+    */
     bh_init(&heap, (void *) pq_array(pq), pq_size(pq) + 1, sizeof(PQnode), pq_compare_node);
     bh_swap(0, bh_size(&heap) - 1, &heap);
     bh_size(&heap) = bh_size(&heap) - 1;
